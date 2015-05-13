@@ -1,0 +1,15 @@
+{
+  "name": "nodeapp",
+  "version": "1.0.0",
+  "description": "A raspberrypi and node webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rafael Battesti",
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.3.5",
+    "express": "^4.12.3"
+  }
+}
