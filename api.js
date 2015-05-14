@@ -1,36 +1,68 @@
-var http = require("http");
-var express = require("express");
+/**
+ * myapi.js
+ * 
+ * @version 1.1 - updated for Express 4.x : April 2015
+ *
+ * 
+ * DESCRIPTION:
+ * a "HELLO WORLD" server-side application to demonstrate running a node 
+ * API Appserver on a Raspberry Pi to access IOs
+ * Uses the Express node packages. 
+ * 
+ * 
+ * @throws none
+ * @see nodejs.org
+ * @see express.org
+ * 
+ * @author Robert Drummond
+ * (C) 2013 PINK PELICAN NZ LTD
+ */
 
-var app = express();
+var http      = require('http');
+var express   = require('express');
 
-// Define array of objects the client will be able to query
-var inputs = [{pin: "11", gpio: "17", value: 1}, {pin: "12", gpio: "18", value: 0}];
+var app       = express();
 
-// Configure express to serve index.html
-app.use(express["static"](__dirname));
+// dummy input port values for our example
+var inputs = [    { pin: '11', gpio: '17', value: 1 },
+                  { pin: '12', gpio: '18', value: 0 }
+                ];
 
-// Define API middleware for server-side application (use get function to define routes)
-// API routes for API calls and page requests
+// ------------------------------------------------------------------------
+// configure Express to serve index.html and any other static pages stored 
+// in the home directory
+app.use(express.static(__dirname));
 
-// Express route for incoming requests for a customer name
-app.get("/inputs/:id", function(req, res) {
-	res.status(200).send(inputs[req.params.id]);
-});
+// Express route for incoming requests for a single input
+app.get('/inputs/:id', function (req, res) {
+  // send an object as a JSON string
+  console.log('id = ' + req.params.id);
+  res.send(inputs[req.params.id]);
+}); // apt.get()
+
+// Express route for incoming requests for a list of all inputs
+app.get('/inputs', function (req, res) {
+  // send an object as a JSON string
+  console.log('all inputs');
+  res.status(200).send(inputs);
+}); // apt.get()
 
 // Express route for any other unrecognised incoming requests
-app.get("*", function(req, res) {
-	res.status(404).send("Unrecognised API call");
+app.get('*', function (req, res) {
+  res.status(404).send('Unrecognised API call');
 });
 
 // Express route to handle errors
-app.use(function(err, req, res, next) {
-	if (req.xhr) {
-		res.status(500).send("Oops, something went wrong!");
-	} else {
-		next(err);
-	}
-});
+app.use(function (err, req, res, next) {
+  if (req.xhr) {
+    res.status(500).send('Oops, Something went wrong!');
+  } else {
+    next(err);
+  }
+}); // apt.use()
 
-// Start server listening on port 3000
+// ------------------------------------------------------------------------
+// Start Express App Server
+//
 app.listen(3000);
-console.log("App server running at port 3000");
+console.log('App Server is listening on port 3000');
